@@ -3,15 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Portfolio.Core.Entities
+namespace Portfolio.APP.DTOs.ProfileDtos
 {
-    public class Profile
+    public class UpdateProfileDto
     {
+        [JsonIgnore]
+
         [Key]
         public Guid Id { get; set; }
 
@@ -23,13 +24,10 @@ namespace Portfolio.Core.Entities
         public string ProfileImageUrl { get; set; } = string.Empty;
         public string ResumeUrl { get; set; } = string.Empty;
 
+        [JsonIgnore]
         public Guid AppUserId { get; set; }
 
         [JsonIgnore]
         public AppUser AppUser { get; set; }
     }
-
-
-
-
 }

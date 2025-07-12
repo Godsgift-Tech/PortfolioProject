@@ -1,4 +1,5 @@
 ﻿using Portfolio.Core.Entities;
+using Portfolio.Core.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,15 @@ namespace Portfolio.Core.DataInterfaces
 {
     public interface IProfileRepository
     {
-        Task CreateProfileAsync(Profile profile);
-        Task UpdateProfileAsync(Profile profile);
-        Task DeleteProfileAsync(Profile profile);
-        Task<IEnumerable<Profile>> GetAllProfilesAsync();
+        Task CreateProfileAsync(ProfileEntity profile);
+        Task UpdateProfileAsync(ProfileEntity profile);
+        // void DeleteProfileAsync(ProfileEntity profile);
+        // Task<IEnumerable<ProfileEntity>> GetAllProfilesAsync();
+        Task<PagedResult<ProfileEntity>> GetPagedProfilesAsync(int pageNumber, int pageSize);
+
+        Task<ProfileEntity>GetProfileById(Guid id);
+        Task<bool> DeleteProfileAsync(Guid id);
+
+        // Task CreateProfileAsync(Portfolio.APP.DTOs.ProfileDtos.CreateProfileDto profile);
     }
 }

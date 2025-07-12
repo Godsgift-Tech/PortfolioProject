@@ -1,7 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Portfolio.APP.Mapping;
+using Portfolio.Core.DataInterfaces;
 using Portfolio.Core.ProfileUser;
 using Portfolio.Infra.Data;
+using Portfolio.Infra.DataImplementations;
+using Portfolio.Infra.Unit_of_Works;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +16,17 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// registering other services
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+builder.Services.AddScoped<IUnitOFWork, UnitOFWork>();
+builder.Services.AddMemoryCache();
+
+
+// Register AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+
+
 
 builder.Services.AddIdentity<AppUser, Role>(options =>
 {

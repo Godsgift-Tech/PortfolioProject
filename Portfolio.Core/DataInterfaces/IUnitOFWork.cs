@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Portfolio.Core.DataInterfaces
 {
-    public interface IUnitOFWork
+    public interface IUnitOFWork : IDisposable
     {
+        IProfileRepository Profiles { get; }
+        Task<int> CompleteAsync();
+
     }
 }

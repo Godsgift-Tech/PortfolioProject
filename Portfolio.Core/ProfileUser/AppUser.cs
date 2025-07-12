@@ -17,7 +17,7 @@ namespace Portfolio.Core.ProfileUser
 
         public ProfessionalStack ProfessionalStack { get; set; } = new ProfessionalStack();
         public ICollection<WorkExperience> WorkExperiences { get; set; } = new List<WorkExperience>();
-        public Profile Profile { get; set; }
+        public ProfileEntity Profile { get; set; }
         public ICollection<Post> Posts { get; set; } = new List<Post>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public RecruiterProfile RecruiterProfile { get; set; }
