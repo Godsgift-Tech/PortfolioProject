@@ -10,6 +10,8 @@ namespace Portfolio.Infra.Data
         public PortfolioContext(DbContextOptions<PortfolioContext> options) : base(options) { }
 
         public DbSet<ProfileEntity> Profiles { get; set; }
+
+
         public DbSet<WorkExperience> WorkExperiences { get; set; }
         public DbSet<ProfessionalStack> ProfessionalStacks { get; set; }
 
@@ -42,6 +44,7 @@ namespace Portfolio.Infra.Data
                 .HasForeignKey<ProfileEntity>(p => p.AppUserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+
             // AppUser ↔ WorkExperiences (1-to-many)
             modelBuilder.Entity<AppUser>()
                 .HasMany(a => a.WorkExperiences)
@@ -55,8 +58,6 @@ namespace Portfolio.Infra.Data
                 .WithOne()
              .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.NoAction
 
-
-           
 
             // AppUser ↔ Post (1-to-many)
             modelBuilder.Entity<AppUser>()
@@ -99,8 +100,14 @@ namespace Portfolio.Infra.Data
                 .WithOne(j => j.AppUser)
                 .HasForeignKey(j => j.AppUserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+          //Profile to AppUser relationship
+            modelBuilder.Entity<ProfileEntity>()
+                 .HasIndex(p => p.AppUserId)
+                 .IsUnique(); // Enforce unique profile per user
+
         }
     }
-
-
 }
+
+

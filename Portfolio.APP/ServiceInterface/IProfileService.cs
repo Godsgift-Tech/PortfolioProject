@@ -12,10 +12,13 @@ namespace Portfolio.APP.ServiceInterface
 {
     public interface IProfileService
     {
-        Task<ServiceResponse<CreateProfileDto>> CreateProfileAsync(CreateProfileDto profile);
+        Task<ServiceResponse<CreateProfileDto>> CreateProfileAsync( CreateProfileDto profile);
 
-        Task<ServiceResponse<UpdateProfileDto>> UpdateProfileAsync(Guid id, UpdateProfileDto profile);
+       // Task<ServiceResponse<CreateProfileDto>> UpdateProfileAsync(Guid id, CreateProfileDto profile);
+        Task<ServiceResponse<ProfileDto>> UpdateProfileAsync(Guid id, ProfileUpdateDto profileDto);
+
         Task<ServiceResponse<bool>> DeleteProfileAsync(Guid id);
+        Task<ServiceResponse<CreateProfileDto>> GetProfileById(Guid id);
 
         Task<ServiceResponse<PagedResult<ProfileDto>>> GetAllProfilesAsync(int pageNumber, int pageSize);
     }

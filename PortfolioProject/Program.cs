@@ -1,7 +1,8 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Portfolio.APP.Mapping;
+using Portfolio.APP.ServiceImplementations;
+using Portfolio.APP.ServiceInterface;
 using Portfolio.Core.DataInterfaces;
 using Portfolio.Core.ProfileUser;
 using Portfolio.Infra.Data;
@@ -10,48 +11,54 @@ using Portfolio.Infra.Unit_of_Works;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// 🔧 Add Database Context
+var configuration = builder.Configuration;
+Console.WriteLine("🔗 Connection string in use: " + configuration.GetConnectionString("DefaultConnection"));
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-// registering other services
-builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
-builder.Services.AddScoped<IUnitOFWork, UnitOFWork>();
-builder.Services.AddMemoryCache();
+builder.Services.AddDbContext<PortfolioContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-// Register AutoMapper
-builder.Services.AddAutoMapper(typeof(MappingProfile));
-
-
-
-
+// 🔧 Identity Configuration
 builder.Services.AddIdentity<AppUser, Role>(options =>
 {
-    // Optional: password or lockout settings
     options.Password.RequireDigit = true;
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 6;
 })
-.AddEntityFrameworkStores<PortfolioContext>() // your DbContext
-.AddDefaultTokenProviders(); // needed for email confirmation, password reset, etc.
-builder.Services.AddDbContext<PortfolioContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+.AddEntityFrameworkStores<PortfolioContext>()
+.AddDefaultTokenProviders();
+
+// 🔧 Register Services
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IUnitOFWork, UnitOFWork>();
+builder.Services.AddMemoryCache();
+
+// 🔧 AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+// 🔧 Controllers & Swagger
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
+// 🔧 Optional: Auto Migrate and Seed Roles/Users on Startup
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+//    var context = services.GetRequiredService<PortfolioContext>();
+//    await context.Database.MigrateAsync();
+//
+//    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+//    var roleManager = services.GetRequiredService<RoleManager<Role>>();
+//    await IdentitySeeder.SeedAsync(userManager, roleManager);
+//}
 
-    var userManager = services.GetRequiredService<UserManager<AppUser>>();
-    var roleManager = services.GetRequiredService<RoleManager<Role>>();
-
-    await IdentitySeeder.SeedAsync(userManager, roleManager);
-}
-// Configure the HTTP request pipeline.
+// 🔧 Middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -59,9 +66,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

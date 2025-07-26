@@ -12,8 +12,8 @@ using Portfolio.Infra.Data;
 namespace Portfolio.Infra.Migrations
 {
     [DbContext(typeof(PortfolioContext))]
-    [Migration("20250711160343_Initial")]
-    partial class Initial
+    [Migration("20250717035306_initials")]
+    partial class initials
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -266,13 +266,13 @@ namespace Portfolio.Infra.Migrations
                     b.ToTable("ProfessionalStacks");
                 });
 
-            modelBuilder.Entity("Portfolio.Core.Entities.Profile", b =>
+            modelBuilder.Entity("Portfolio.Core.Entities.ProfileEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AppUserId")
+                    b.Property<Guid?>("AppUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EmailAddress")
@@ -306,7 +306,8 @@ namespace Portfolio.Infra.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[AppUserId] IS NOT NULL");
 
                     b.ToTable("Profiles");
                 });
@@ -473,26 +474,6 @@ namespace Portfolio.Infra.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            Name = "Recruiter",
-                            NormalizedName = "RECRUITER"
-                        },
-                        new
-                        {
-                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            Name = "Developer",
-                            NormalizedName = "DEVELOPER"
-                        },
-                        new
-                        {
-                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -609,13 +590,12 @@ namespace Portfolio.Infra.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("Portfolio.Core.Entities.Profile", b =>
+            modelBuilder.Entity("Portfolio.Core.Entities.ProfileEntity", b =>
                 {
                     b.HasOne("Portfolio.Core.ProfileUser.AppUser", "AppUser")
                         .WithOne("Profile")
-                        .HasForeignKey("Portfolio.Core.Entities.Profile", "AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Portfolio.Core.Entities.ProfileEntity", "AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("AppUser");
                 });

@@ -9,6 +9,7 @@ namespace Portfolio.Core.DataInterfaces
     public interface IUnitOFWork : IDisposable
     {
         IProfileRepository Profiles { get; }
+        IAppUserRepository AppUserRepository { get; }
         Task<int> CompleteAsync();
 
     }

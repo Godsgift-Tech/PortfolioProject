@@ -5,6 +5,7 @@ using Portfolio.Core.Pagination;
 using Portfolio.Infra.Data;
 using System;
 using System.Collections.Generic;
+//using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace Portfolio.Infra.DataImplementations
             _db = db;
         }
         public  async Task CreateProfileAsync(ProfileEntity profile) => await _db.Profiles.AddAsync(profile);
+        
 
         public async Task<bool> DeleteProfileAsync(Guid id)
         {
@@ -42,9 +44,19 @@ namespace Portfolio.Infra.DataImplementations
         }
 
         public async Task<ProfileEntity> GetProfileById(Guid id) => await _db.Profiles.FirstOrDefaultAsync(p => p.Id == id);
-       
 
-        public async Task UpdateProfileAsync(ProfileEntity profile) =>  _db.Profiles.Update(profile);
-       
+        public async Task<ProfileEntity?> GetProfileByUserIdAsync(Guid appUserId)
+        {
+            return await _db.Profiles.FirstOrDefaultAsync(p => p.AppUserId == appUserId);
+        }
+
+
+        public async Task UpdateProfileAsync(ProfileEntity profile)
+        {
+            var update = await _db.Profiles.FindAsync(profile.Id);
+            if (update != null)
+            _db.Profiles.Update(profile);
+
+        }
     }
 }

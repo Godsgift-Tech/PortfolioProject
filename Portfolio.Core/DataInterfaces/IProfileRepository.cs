@@ -17,6 +17,8 @@ namespace Portfolio.Core.DataInterfaces
         Task<PagedResult<ProfileEntity>> GetPagedProfilesAsync(int pageNumber, int pageSize);
 
         Task<ProfileEntity>GetProfileById(Guid id);
+        Task<ProfileEntity?> GetProfileByUserIdAsync(Guid appUserId);
+
         Task<bool> DeleteProfileAsync(Guid id);
 
         // Task CreateProfileAsync(Portfolio.APP.DTOs.ProfileDtos.CreateProfileDto profile);

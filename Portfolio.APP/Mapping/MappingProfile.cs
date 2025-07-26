@@ -9,8 +9,10 @@ namespace Portfolio.APP.Mapping
         public MappingProfile()
         {
             CreateMap<CreateProfileDto, ProfileEntity>().ReverseMap();
-          //  CreateMap<ProfileEntity, CreateProfileDto>();
-           // CreateMap<UpdateProfileDto, Profile>().ReverseMap();
+            CreateMap<ProfileDto, ProfileEntity>().ReverseMap();
+            CreateMap<ProfileUpdateDto, ProfileEntity>()
+      .ForMember(dest => dest.Id, opt => opt.Ignore())
+      .ForMember(dest => dest.AppUserId, opt => opt.Ignore());
         }
     }
 }

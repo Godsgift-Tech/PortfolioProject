@@ -23,7 +23,7 @@ namespace Portfolio.Core.Entities
         public string ProfileImageUrl { get; set; } = string.Empty;
         public string ResumeUrl { get; set; } = string.Empty;
 
-        public Guid AppUserId { get; set; }
+        public Guid? AppUserId { get; set; }
 
         [JsonIgnore]
         public AppUser AppUser { get; set; }
