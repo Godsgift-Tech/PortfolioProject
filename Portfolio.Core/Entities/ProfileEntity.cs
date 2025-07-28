@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
@@ -23,10 +24,25 @@ namespace Portfolio.Core.Entities
         public string ProfileImageUrl { get; set; } = string.Empty;
         public string ResumeUrl { get; set; } = string.Empty;
 
-        public Guid? AppUserId { get; set; }
+        public Guid AppUserId { get; set; }
 
         [JsonIgnore]
+        [ForeignKey(nameof(AppUserId))]
         public AppUser AppUser { get; set; }
+
+        public ICollection<WorkExperience> WorkExperiences { get; set; } = new List<WorkExperience>();
+
+        public Guid? ProfessionalStackId { get; set; }
+
+        [ForeignKey(nameof(ProfessionalStackId))]
+        public ProfessionalStack ProfessionalStack { get; set; }
+
+
+        public ICollection<MediaUpload> MediaUploads { get; set; } = new List<MediaUpload>();
+
+        public ICollection<Post> Posts { get; set; } = new List<Post>();
+
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 
 
