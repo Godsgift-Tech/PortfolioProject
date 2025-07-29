@@ -2,21 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 using Portfolio.Core.Entities;
 using Portfolio.Core.ProfileUser;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Portfolio.Infra.Data
 {
     public class PortfolioContext : IdentityDbContext<AppUser, Role, Guid>
     {
-        public PortfolioContext(DbContextOptions<PortfolioContext> options) : base(options)
-        {
-        }
+        public PortfolioContext(DbContextOptions<PortfolioContext> options) : base(options) { }
 
-        public DbSet<Profile> Profiles { get; set; }
+        public DbSet<ProfileEntity> Profiles { get; set; }
         public DbSet<WorkExperience> WorkExperiences { get; set; }
         public DbSet<ProfessionalStack> ProfessionalStacks { get; set; }
 
@@ -24,99 +18,106 @@ namespace Portfolio.Infra.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // seeding initial data
-
-            // Define static role IDs (optional, but ensures consistency)
-            var recruiterRoleId = Guid.NewGuid();
-            var developerRoleId = Guid.NewGuid();
-            var adminRoleId = Guid.NewGuid();
+            // Seeding roles
+            var recruiterRoleId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            var developerRoleId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+            var adminRoleId = Guid.Parse("33333333-3333-3333-3333-333333333333");
 
             modelBuilder.Entity<Role>().HasData(
-                new Role
-                {
-                    Id = recruiterRoleId,
-                    Name = "Recruiter",
-                    NormalizedName = "RECRUITER"
-                },
-                new Role
-                {
-                    Id = developerRoleId,
-                    Name = "Developer",
-                    NormalizedName = "DEVELOPER"
-                },
-                new Role
-                {
-                    Id = adminRoleId,
-                    Name = "Admin",
-                    NormalizedName = "ADMIN"
-                }
+                new Role { Id = recruiterRoleId, Name = "Recruiter", NormalizedName = "RECRUITER" },
+                new Role { Id = developerRoleId, Name = "Developer", NormalizedName = "DEVELOPER" },
+                new Role { Id = adminRoleId, Name = "Admin", NormalizedName = "ADMIN" }
             );
 
-
-            // AppUser ↔ ProfessionalStack (1-to-1)
-            modelBuilder.Entity<AppUser>()
-                .HasOne(a => a.ProfessionalStack)
-                .WithOne(p => p.AppUser)
-                .HasForeignKey<ProfessionalStack>(p => p.AppUserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // AppUser ↔ Profile (1-to-1)
+            // AppUser ↔ ProfileEntity (1-to-1)
             modelBuilder.Entity<AppUser>()
                 .HasOne(a => a.Profile)
                 .WithOne(p => p.AppUser)
-                .HasForeignKey<Profile>(p => p.AppUserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey<ProfileEntity>(p => p.AppUserId)
+                .OnDelete(DeleteBehavior.Cascade); // Only one side uses Cascade
 
-            // AppUser ↔ WorkExperiences (1-to-many)
-            modelBuilder.Entity<AppUser>()
-                .HasMany(a => a.WorkExperiences)
-                .WithOne(w => w.AppUser)
-                .HasForeignKey(w => w.AppUserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // ProfessionalStack ↔ WorkExperiences (optional if AppUser already links WorkExperience directly)
+           
+            // ProfessionalStack ↔ ProfileEntity (1-to-1, correct setup)
             modelBuilder.Entity<ProfessionalStack>()
-                .HasMany(p => p.WorkExperiences)
-                .WithOne()
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(ps => ps.Profile)
+                .WithOne(p => p.ProfessionalStack)
+                .HasForeignKey<ProfessionalStack>(ps => ps.ProfileId)
+                .IsRequired(true) // or false, depending on your logic
+                .OnDelete(DeleteBehavior.Cascade); // or Restrict, depending on your need
 
-            // AppUser <-> Profile (1-to-1)
+
+
+            // ProfessionalStack ↔ WorkExperiences (1-to-many)
+            modelBuilder.Entity<WorkExperience>()
+                .HasOne(w => w.ProfessionalStack)
+                .WithMany(ps => ps.WorkExperiences)
+                .HasForeignKey(w => w.ProfessionalStackId)
+                .OnDelete(DeleteBehavior.Restrict); // Avoids cascade loop
+
+            // ProfileEntity ↔ WorkExperiences (optional many-to-one)
+            modelBuilder.Entity<WorkExperience>()
+                .HasOne(w => w.Profile)
+                .WithMany(p => p.WorkExperiences)
+                .HasForeignKey(w => w.ProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // AppUser ↔ Post (1-to-many)
             modelBuilder.Entity<AppUser>()
-                .HasOne(u => u.Profile)
+                .HasMany(u => u.JobPosts)
                 .WithOne(p => p.AppUser)
-                .HasForeignKey<Profile>(p => p.AppUserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(p => p.AppUserId)
+                .OnDelete(DeleteBehavior.Cascade); // Allowed cascade
 
-            // AppUser <-> Post (1-to-many)
-            modelBuilder.Entity<AppUser>()
-                .HasMany(u => u.Posts)
-                .WithOne(p => p.AppUser)
-                .HasForeignKey(p => p.AppUserId);
-
-            // AppUser <-> Comment (1-to-many)
-            modelBuilder.Entity<AppUser>()
-                .HasMany(u => u.Comments)
-                .WithOne(c => c.AppUser)
-                .HasForeignKey(c => c.AppUserId);
-
-            // Post <-> Comment (1-to-many)
+            // ProfileEntity ↔ Posts (optional)
             modelBuilder.Entity<Post>()
-                .HasMany(p => p.Comments)
-                .WithOne(c => c.Post)
-                .HasForeignKey(c => c.PostId);
+                .HasOne(p => p.Profile)
+                .WithMany(pe => pe.Posts)
+                .HasForeignKey(p => p.ProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // Post <-> Media (1-to-many)
+            // ProfileEntity ↔ Comments (1-to-many)
+            modelBuilder.Entity<ProfileEntity>()
+                .HasMany(u => u.Comments)
+                .WithOne(c => c.Profile)
+                .HasForeignKey(c => c.ProfileId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ProfileEntity>()
+                .HasMany(k => k.MediaUploads)
+                .WithOne(r => r.Profile)
+                .HasForeignKey(r => r.ProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Post ↔ Comment (1-to-many)
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.Post)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(c => c.PostId)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent circular cascade
+
+            // ProfileEntity ↔ Comments (optional)
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.Profile)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(c => c.ProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Post ↔ Media (1-to-many)
             modelBuilder.Entity<Post>()
                 .HasMany(p => p.Media)
+
                 .WithOne(m => m.Post)
-                .HasForeignKey(m => m.PostId);
+                .HasForeignKey(m => m.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            // AppUser ↔ RecruiterProfile (1-to-1)
             modelBuilder.Entity<AppUser>()
-    .HasOne(u => u.RecruiterProfile)
-    .WithOne(r => r.AppUser)
-    .HasForeignKey<RecruiterProfile>(r => r.AppUserId)
-    .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(u => u.RecruiterProfile)
+                .WithOne(r => r.AppUser)
+                .HasForeignKey<RecruiterProfile>(r => r.AppUserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            // AppUser ↔ JobPosts (1-to-many)
             modelBuilder.Entity<AppUser>()
                 .HasMany(u => u.JobPosts)
                 .WithOne(j => j.AppUser)
@@ -124,9 +125,5 @@ namespace Portfolio.Infra.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
         }
-
-
     }
-
-
 }
