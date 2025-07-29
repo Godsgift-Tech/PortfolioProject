@@ -52,5 +52,16 @@ namespace Portfolio.API.Controllers
             var result = await _profileService.GetProfileById(id);
             return result.success ? Ok(result) : NotFound(result);
         }
+
+        [HttpGet("full/{profileId}")]
+        public async Task<IActionResult> GetFullProfileById(Guid profileId)
+        {
+            var response = await _profileService.GetFullProfileByIdAsync(profileId);
+
+            if (!response.success)
+                return NotFound(response);
+
+            return Ok(response);
+        }
     }
 }

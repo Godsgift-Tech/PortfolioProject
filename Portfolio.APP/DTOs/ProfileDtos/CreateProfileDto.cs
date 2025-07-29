@@ -42,6 +42,6 @@ namespace Portfolio.APP.DTOs.ProfileDtos
 
         // Navigation property should not be in a DTO
         [JsonIgnore]
-        public AppUser? AppUser { get; set; }
+        public AppUserDto? AppUser { get; set; }
     }
 }

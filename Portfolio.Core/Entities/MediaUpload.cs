@@ -1,8 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-using Portfolio.Core.ProfileUser;
 
 namespace Portfolio.Core.Entities
 {

@@ -52,7 +52,7 @@ namespace Portfolio.APP.ServiceImplementations
             var createdProfileDto = _mapper.Map<CreateProfileDto>(newProfile);
 
             // Cache
-            _memoryCache.Set($"profile_{newProfile.Id}", createdProfileDto, TimeSpan.FromMinutes(30));
+            _memoryCache.Set($"profile_{newProfile.Id}", createdProfileDto, TimeSpan.FromMinutes(10));
             _memoryCache.Remove(AllProfilesCacheKey);
 
             return new ServiceResponse<CreateProfileDto>(createdProfileDto, true, "Profile created and cached.");
@@ -143,5 +143,27 @@ namespace Portfolio.APP.ServiceImplementations
 
             return new ServiceResponse<CreateProfileDto>(profileInfo, true, "Profile retrieved successfully");
         }
+        public async Task<ServiceResponse<FullProfileDto?>> GetFullProfileByIdAsync(Guid profileId)
+        {
+
+            try
+            {
+                var fullProfile = await _unitOFWork.Profiles.GetFullProfileAsync(profileId);
+                if (fullProfile == null)
+                {
+                    return new ServiceResponse<FullProfileDto?>(null!, false, "Profile not found");
+                }
+
+                var fullProfileDto = _mapper.Map<FullProfileDto>(fullProfile);
+                return new ServiceResponse<FullProfileDto?>(fullProfileDto, true, "See profile details");
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<FullProfileDto?>(null, false, $"An error occurred: {ex.Message}");
+            }
+
+        }
+
+
     }
 }

@@ -36,13 +36,16 @@ namespace Portfolio.Infra.Data
                 .HasForeignKey<ProfileEntity>(p => p.AppUserId)
                 .OnDelete(DeleteBehavior.Cascade); // Only one side uses Cascade
 
-            // ProfileEntity ↔ ProfessionalStack (1-to-1)
-            modelBuilder.Entity<ProfileEntity>()
-    .HasOne(p => p.ProfessionalStack)
-    .WithOne(ps => ps.Profile)
-    .HasForeignKey<ProfileEntity>(p => p.ProfessionalStackId)
-    .IsRequired(false) // make it optional
-    .OnDelete(DeleteBehavior.Restrict);
+           
+            // ProfessionalStack ↔ ProfileEntity (1-to-1, correct setup)
+            modelBuilder.Entity<ProfessionalStack>()
+                .HasOne(ps => ps.Profile)
+                .WithOne(p => p.ProfessionalStack)
+                .HasForeignKey<ProfessionalStack>(ps => ps.ProfileId)
+                .IsRequired(true) // or false, depending on your logic
+                .OnDelete(DeleteBehavior.Cascade); // or Restrict, depending on your need
+
+
 
             // ProfessionalStack ↔ WorkExperiences (1-to-many)
             modelBuilder.Entity<WorkExperience>()

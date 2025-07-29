@@ -3,12 +3,9 @@ using Portfolio.Core.DataInterfaces;
 using Portfolio.Core.Entities;
 using Portfolio.Core.Pagination;
 using Portfolio.Infra.Data;
-using System;
-using System.Collections.Generic;
 //using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+//using System.Data.Entity;
 
 namespace Portfolio.Infra.DataImplementations
 {
@@ -49,6 +46,18 @@ namespace Portfolio.Infra.DataImplementations
         {
             return await _db.Profiles.FirstOrDefaultAsync(p => p.AppUserId == appUserId);
         }
+
+        public async Task<ProfileEntity?> GetFullProfileAsync(Guid profileId)
+        {
+            return await _db.Profiles
+                .Include(p => p.WorkExperiences)
+                .Include(p => p.ProfessionalStack)
+                .Include(p => p.MediaUploads)
+                .Include(p => p.Posts).ThenInclude(post => post.Comments)
+                .Include(p => p.Comments)
+                .FirstOrDefaultAsync(p => p.Id == profileId);
+        }
+
 
 
         public async Task UpdateProfileAsync(ProfileEntity profile)

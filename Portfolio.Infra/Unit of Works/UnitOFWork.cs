@@ -12,11 +12,17 @@ namespace Portfolio.Infra.Unit_of_Works
 
         public IAppUserRepository AppUserRepository {  get; }
 
-        public UnitOFWork(PortfolioContext db, IProfileRepository profileRepository, IAppUserRepository appUserRepository)
+        public IProfessionalStackRepository ProfessionalStackRepository {  get; }
+
+        public IWorkExperienceRepository WorkExperienceRepository {  get; }
+
+        public UnitOFWork(PortfolioContext db, IProfileRepository profileRepository, IAppUserRepository appUserRepository, IProfessionalStackRepository professionalStackRepository, IWorkExperienceRepository workExperienceRepository)
         {
             _db = db;
             Profiles = profileRepository;
             AppUserRepository = appUserRepository;
+            ProfessionalStackRepository = professionalStackRepository;
+            WorkExperienceRepository = workExperienceRepository;
         }
 
         public async Task<int> CompleteAsync() => await _db.SaveChangesAsync();

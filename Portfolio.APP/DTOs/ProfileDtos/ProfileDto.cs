@@ -25,7 +25,7 @@ namespace Portfolio.APP.DTOs.ProfileDtos
         public Guid AppUserId { get; set; }
 
         [JsonIgnore]
-        public AppUser AppUser { get; set; }
+        public AppUserDto AppUser { get; set; }
 
     }
 }

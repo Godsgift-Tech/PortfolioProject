@@ -19,6 +19,9 @@ namespace Portfolio.APP.ServiceInterface
 
         Task<ServiceResponse<bool>> DeleteProfileAsync(Guid id);
         Task<ServiceResponse<CreateProfileDto>> GetProfileById(Guid id);
+     //   Task<ServiceResponse<ProfileEntity?>> GetFullProfileAsync(Guid profileId);
+
+        Task<ServiceResponse<FullProfileDto?>> GetFullProfileByIdAsync(Guid profileId);
 
         Task<ServiceResponse<PagedResult<ProfileDto>>> GetAllProfilesAsync(int pageNumber, int pageSize);
     }

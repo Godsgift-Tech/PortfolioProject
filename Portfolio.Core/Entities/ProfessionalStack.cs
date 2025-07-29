@@ -26,14 +26,7 @@ namespace Portfolio.Core.Entities
         [JsonIgnore]
         public ProfileEntity Profile { get; set; } = null!;
 
-        //// Foreign key to AppUser
-        //[Required]
-        //public Guid AppUserId { get; set; }
-
-        //[JsonIgnore]
-        //public AppUser AppUser { get; set; } = null!;
-
-        // Work experience collection
+       
         public ICollection<WorkExperience> WorkExperiences { get; set; } = new List<WorkExperience>();
     }
 }

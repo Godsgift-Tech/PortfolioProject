@@ -11,14 +11,14 @@ using Portfolio.Infra.Unit_of_Works;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 🔧 Add Database Context
+//  Add Database Context
 var configuration = builder.Configuration;
 Console.WriteLine("🔗 Connection string in use: " + configuration.GetConnectionString("DefaultConnection"));
 
 builder.Services.AddDbContext<PortfolioContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 🔧 Identity Configuration
+//  Identity Configuration
 builder.Services.AddIdentity<AppUser, Role>(options =>
 {
     options.Password.RequireDigit = true;
@@ -28,37 +28,27 @@ builder.Services.AddIdentity<AppUser, Role>(options =>
 .AddEntityFrameworkStores<PortfolioContext>()
 .AddDefaultTokenProviders();
 
-// 🔧 Register Services
+//  Register Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IWorkExperienceRepository, WorkExperienceRepository>();
+builder.Services.AddScoped<IProfessionalStackRepository, ProfessionalStackRepository>();
+builder.Services.AddScoped<IProfessionalStackService, ProfessionalStackService>();
 builder.Services.AddScoped<IUnitOFWork, UnitOFWork>();
 builder.Services.AddMemoryCache();
 
-// 🔧 AutoMapper
+//  AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-// 🔧 Controllers & Swagger
+//  Controllers & Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// 🔧 Optional: Auto Migrate and Seed Roles/Users on Startup
-//using (var scope = app.Services.CreateScope())
-//{
-//    var services = scope.ServiceProvider;
-//    var context = services.GetRequiredService<PortfolioContext>();
-//    await context.Database.MigrateAsync();
-//
-//    var userManager = services.GetRequiredService<UserManager<AppUser>>();
-//    var roleManager = services.GetRequiredService<RoleManager<Role>>();
-//    await IdentitySeeder.SeedAsync(userManager, roleManager);
-//}
-
-// 🔧 Middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

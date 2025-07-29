@@ -21,6 +21,8 @@ namespace Portfolio.Core.DataInterfaces
 
         Task<bool> DeleteProfileAsync(Guid id);
 
+        Task<ProfileEntity?> GetFullProfileAsync(Guid profileId);
+
         // Task CreateProfileAsync(Portfolio.APP.DTOs.ProfileDtos.CreateProfileDto profile);
     }
 }
