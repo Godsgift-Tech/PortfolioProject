@@ -36,30 +36,21 @@ namespace Portfolio.Infra.Data
                 .HasForeignKey<ProfileEntity>(p => p.AppUserId)
                 .OnDelete(DeleteBehavior.Cascade); // Only one side uses Cascade
 
-           
-            // ProfessionalStack ↔ ProfileEntity (1-to-1, correct setup)
-            modelBuilder.Entity<ProfessionalStack>()
-                .HasOne(ps => ps.Profile)
-                .WithOne(p => p.ProfessionalStack)
-                .HasForeignKey<ProfessionalStack>(ps => ps.ProfileId)
-                .IsRequired(true) // or false, depending on your logic
-                .OnDelete(DeleteBehavior.Cascade); // or Restrict, depending on your need
+            // Profile ↔ ProfessionalStack (1-to-1)
+            modelBuilder.Entity<ProfileEntity>()
+      .HasOne(p => p.ProfessionalStack)
+      .WithOne(ps => ps.Profile)
+      .HasForeignKey<ProfessionalStack>(ps => ps.ProfileId)
+      .OnDelete(DeleteBehavior.Restrict); // or Cascade
 
 
-
-            // ProfessionalStack ↔ WorkExperiences (1-to-many)
+            // ProfessionalStack ↔ WorkExperience (1-to-many)
             modelBuilder.Entity<WorkExperience>()
                 .HasOne(w => w.ProfessionalStack)
                 .WithMany(ps => ps.WorkExperiences)
                 .HasForeignKey(w => w.ProfessionalStackId)
-                .OnDelete(DeleteBehavior.Restrict); // Avoids cascade loop
+                .IsRequired();
 
-            // ProfileEntity ↔ WorkExperiences (optional many-to-one)
-            modelBuilder.Entity<WorkExperience>()
-                .HasOne(w => w.Profile)
-                .WithMany(p => p.WorkExperiences)
-                .HasForeignKey(w => w.ProfileId)
-                .OnDelete(DeleteBehavior.Restrict);
 
             // AppUser ↔ Post (1-to-many)
             modelBuilder.Entity<AppUser>()
@@ -123,6 +114,12 @@ namespace Portfolio.Infra.Data
                 .WithOne(j => j.AppUser)
                 .HasForeignKey(j => j.AppUserId)
                 .OnDelete(DeleteBehavior.Cascade);
+            // Work experience to nullable userId
+            modelBuilder.Entity<WorkExperience>()
+    .HasOne(w => w.AppUser)
+    .WithMany()
+    .HasForeignKey(w => w.AppUserId)
+    .IsRequired(false);
 
         }
     }

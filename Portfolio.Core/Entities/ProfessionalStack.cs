@@ -26,7 +26,14 @@ namespace Portfolio.Core.Entities
         [JsonIgnore]
         public ProfileEntity Profile { get; set; } = null!;
 
-       
+        // Add this if you want to link it to AppUser
+        public Guid? AppUserId { get; set; }
+
+        [JsonIgnore]
+        public AppUser? AppUser { get; set; } = null!;
+
+
+
         public ICollection<WorkExperience> WorkExperiences { get; set; } = new List<WorkExperience>();
     }
 }

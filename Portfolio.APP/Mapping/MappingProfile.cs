@@ -26,7 +26,12 @@ namespace Portfolio.APP.Mapping
             CreateMap<ProfessionalStack, UpdateProfessionalStackDto>().ReverseMap();
 
 
-            CreateMap<WorkExperience, WorkExperienceDto>();
+            CreateMap<WorkExperience, WorkExperienceDto>().ReverseMap();
+            CreateMap<WorkExperience, DisplayWorkExperienceDto>().ReverseMap();
+            CreateMap<WorkExperience, CreateWorkExperienceDto>().ReverseMap();
+            CreateMap<WorkExperience, UpdateWorkExperienceDto>().ReverseMap();
+            
+
             CreateMap<MediaUpload, MediaUploadDto>();
             CreateMap<Post, PostDto>();
             CreateMap<Comment, CommentDto>();

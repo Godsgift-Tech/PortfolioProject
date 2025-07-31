@@ -4,7 +4,7 @@
     {
         Task CreateWorkExperienceAsync(WorkExperience workExperience);
         Task UpdateWorkExperienceAsync(WorkExperience workExperience);
-        Task GetWorkExperienceById( Guid id );
+        Task<WorkExperience> GetWorkExperienceByIdAsync( Guid id );
         Task<bool> DeleteExperienceAsync(Guid id);
     }
 }

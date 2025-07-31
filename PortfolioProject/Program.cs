@@ -34,6 +34,7 @@ builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IWorkExperienceRepository, WorkExperienceRepository>();
+builder.Services.AddScoped<IWorkExperienceService, WorkExperienceService>();
 builder.Services.AddScoped<IProfessionalStackRepository, ProfessionalStackRepository>();
 builder.Services.AddScoped<IProfessionalStackService, ProfessionalStackService>();
 builder.Services.AddScoped<IUnitOFWork, UnitOFWork>();

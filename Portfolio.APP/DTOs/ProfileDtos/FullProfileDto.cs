@@ -28,7 +28,7 @@ namespace Portfolio.APP.DTOs.ProfileDtos
         public Guid? ProfessionalStackId { get; set; }
         public DisplayProfessionalStackDto? ProfessionalStack { get; set; }
 
-        public List<WorkExperienceDto> WorkExperiences { get; set; } = new();
+        public List<DisplayWorkExperienceDto> WorkExperiences { get; set; } = new();
         public List<MediaUploadDto> MediaUploads { get; set; } = new();
         public List<PostDto> Posts { get; set; } = new();
         public List<CommentDto> Comments { get; set; } = new();

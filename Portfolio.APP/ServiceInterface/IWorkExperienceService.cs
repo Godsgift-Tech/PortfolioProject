@@ -11,10 +11,10 @@ namespace Portfolio.APP.ServiceInterface
 {
     public interface IWorkExperienceService 
     {
-        Task<ServiceResponse<CreateWorkExperienceDto>> AddProfessionalStackAsync(CreateWorkExperienceDto  createWorkExperienceDto);
-        Task<ServiceResponse<WorkExperienceDto>> UpdateProfessionalStackAsync(Guid id, UpdateWorkExperienceDto  workExperienceDto);
+        Task<ServiceResponse<CreateWorkExperienceDto>> AddWorkExperienceAsync(CreateWorkExperienceDto  createWorkExperienceDto);
+        Task<ServiceResponse<WorkExperienceDto>> UpdateWorkExperienceAsync(Guid id, UpdateWorkExperienceDto updateWorkExperienceDto);
         Task<ServiceResponse<bool>> DeleteWorkExperienceAsync(Guid id);
-        Task<ServiceResponse<WorkExperienceDto>> GetWorkExperienceById(Guid id);
-        Task<ServiceResponse<PagedResult<WorkExperienceDto>>> GetAllWorkExperienceAsync(int pageNumber, int pageSize);
+        //Task<ServiceResponse<WorkExperienceDto>> GetWorkExperienceById(Guid id);
+        //Task<ServiceResponse<PagedResult<WorkExperienceDto>>> GetAllWorkExperienceAsync(int pageNumber, int pageSize);
     }
 }

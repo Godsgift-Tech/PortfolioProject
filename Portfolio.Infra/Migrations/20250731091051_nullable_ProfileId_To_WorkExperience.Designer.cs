@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Portfolio.Infra.Data;
 
@@ -11,9 +12,11 @@ using Portfolio.Infra.Data;
 namespace Portfolio.Infra.Migrations
 {
     [DbContext(typeof(PortfolioContext))]
-    partial class PortfolioContextModelSnapshot : ModelSnapshot
+    [Migration("20250731091051_nullable_ProfileId_To_WorkExperience")]
+    partial class nullable_ProfileId_To_WorkExperience
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -338,9 +341,6 @@ namespace Portfolio.Infra.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AppUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Certifications")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -356,8 +356,6 @@ namespace Portfolio.Infra.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.HasIndex("ProfileId")
                         .IsUnique();
@@ -666,17 +664,11 @@ namespace Portfolio.Infra.Migrations
 
             modelBuilder.Entity("Portfolio.Core.Entities.ProfessionalStack", b =>
                 {
-                    b.HasOne("AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId");
-
                     b.HasOne("Portfolio.Core.Entities.ProfileEntity", "Profile")
                         .WithOne("ProfessionalStack")
                         .HasForeignKey("Portfolio.Core.Entities.ProfessionalStack", "ProfileId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("AppUser");
 
                     b.Navigation("Profile");
                 });

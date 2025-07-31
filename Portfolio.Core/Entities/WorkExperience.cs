@@ -28,13 +28,14 @@ public class WorkExperience
     public ProfessionalStack ProfessionalStack { get; set; } = null!;
 
     // Add this if you want to link it to AppUser
-    public Guid AppUserId { get; set; }
+    public Guid? AppUserId { get; set; }
 
     [JsonIgnore]
-    public AppUser AppUser { get; set; } = null!;
+    public AppUser? AppUser { get; set; } = null!;
 
-    [Required]
-    public Guid ProfileId { get; set; }
+
+    //[Required]
+    public Guid? ProfileId { get; set; }
 
     [JsonIgnore]
     public ProfileEntity Profile { get; set; } = null!;

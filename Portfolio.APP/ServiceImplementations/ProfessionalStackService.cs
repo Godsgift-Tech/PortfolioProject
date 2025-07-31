@@ -29,7 +29,12 @@ namespace Portfolio.APP.ServiceImplementations
             {
                 return new ServiceResponse<CreateProfessionalStackDto>(null!, false, "Profile does not exist! Create a profile first");
             }
+            
+
             var newProfStack = _mapper.Map<ProfessionalStack>(createProfessionalStack);
+
+            newProfStack.AppUserId = profileExist.AppUserId;
+
             await _unitOFWork.ProfessionalStackRepository.CreateStackAsync(newProfStack);
             await _unitOFWork.CompleteAsync();
             var createdStack = _mapper.Map<CreateProfessionalStackDto>(newProfStack);
@@ -37,7 +42,7 @@ namespace Portfolio.APP.ServiceImplementations
             _memoryCache.Set($"ProfessionalStack_{newProfStack.Id}", createProfessionalStack, TimeSpan.FromMinutes(10));
             _memoryCache.Remove(AllProfessionalStackCacheKey);
 
-            return new ServiceResponse<CreateProfessionalStackDto>(createdStack, true, "Professional Stack created and cached.");
+            return new ServiceResponse<CreateProfessionalStackDto>(createdStack, true, "Stack created successfully!.You can add your work experience.");
         }
 
         public async Task<ServiceResponse<bool>> DeleteProfessionalStackAsync(Guid id)
