@@ -3,9 +3,7 @@ using Portfolio.Core.DataInterfaces;
 using Portfolio.Core.Entities;
 using Portfolio.Core.Pagination;
 using Portfolio.Infra.Data;
-//using System.Data.Entity;
 
-//using System.Data.Entity;
 
 namespace Portfolio.Infra.DataImplementations
 {
@@ -28,8 +26,6 @@ namespace Portfolio.Infra.DataImplementations
             _db.Profiles.Remove(profile);
             return true; // You still need to call CompleteAsync() in the UnitOfWork
         }
-
-        //  public async Task<IEnumerable<ProfileEntity>> GetAllProfilesAsync() => await _db.Profiles.ToListAsync();
 
         public async Task<PagedResult<ProfileEntity>> GetPagedProfilesAsync(int pageNumber, int pageSize)
         {
@@ -57,7 +53,6 @@ namespace Portfolio.Infra.DataImplementations
                 .Include(p => p.Comments)
                 .FirstOrDefaultAsync(p => p.Id == profileId);
         }
-
 
 
         public async Task UpdateProfileAsync(ProfileEntity profile)

@@ -37,6 +37,7 @@ builder.Services.AddScoped<IWorkExperienceRepository, WorkExperienceRepository>(
 builder.Services.AddScoped<IWorkExperienceService, WorkExperienceService>();
 builder.Services.AddScoped<IProfessionalStackRepository, ProfessionalStackRepository>();
 builder.Services.AddScoped<IProfessionalStackService, ProfessionalStackService>();
+builder.Services.AddScoped<IRecruiterRepository, RecruiterRepository>();
 builder.Services.AddScoped<IUnitOFWork, UnitOFWork>();
 builder.Services.AddMemoryCache();
 
