@@ -14,9 +14,15 @@ namespace Portfolio.Core.Entities
         public string JobType { get; set; } = string.Empty; // Remote, Hybrid, Onsite
         public DateTime PostedAt { get; set; } = DateTime.UtcNow;
 
+        public Guid? RecruiterId { get; set; }
+
+        [JsonIgnore]
+        public RecruiterProfile? Recruiter { get; set; }
         public Guid AppUserId { get; set; }
         [JsonIgnore]
         public AppUser AppUser { get; set; }
+        public ICollection<RecruiterMediaUpload> Media { get; set; } = new List<RecruiterMediaUpload>();
+
     }
 
 }

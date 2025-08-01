@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Portfolio.Infra.Data;
 
@@ -11,9 +12,11 @@ using Portfolio.Infra.Data;
 namespace Portfolio.Infra.Migrations
 {
     [DbContext(typeof(PortfolioContext))]
-    partial class PortfolioContextModelSnapshot : ModelSnapshot
+    [Migration("20250731204654_RecruiterId")]
+    partial class RecruiterId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -256,14 +259,9 @@ namespace Portfolio.Infra.Migrations
                     b.Property<DateTime>("PostedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("RecruiterId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
-
-                    b.HasIndex("RecruiterId");
 
                     b.ToTable("JobPost");
                 });
@@ -418,43 +416,6 @@ namespace Portfolio.Infra.Migrations
                     b.ToTable("Profiles");
                 });
 
-            modelBuilder.Entity("Portfolio.Core.Entities.RecruiterMediaUpload", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AppUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("JobPostId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("RecruiterId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UploadedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasIndex("JobPostId");
-
-                    b.HasIndex("RecruiterId");
-
-                    b.ToTable("RecruiterMediaUpload");
-                });
-
             modelBuilder.Entity("Portfolio.Core.Entities.RecruiterProfile", b =>
                 {
                     b.Property<Guid>("Id")
@@ -473,14 +434,6 @@ namespace Portfolio.Infra.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Position")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Qualification")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RecruiterName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -665,17 +618,10 @@ namespace Portfolio.Infra.Migrations
                     b.HasOne("AppUser", "AppUser")
                         .WithMany("JobPosts")
                         .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Portfolio.Core.Entities.RecruiterProfile", "Recruiter")
-                        .WithMany("JobPosts")
-                        .HasForeignKey("RecruiterId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.Navigation("AppUser");
-
-                    b.Navigation("Recruiter");
                 });
 
             modelBuilder.Entity("Portfolio.Core.Entities.MediaUpload", b =>
@@ -749,28 +695,6 @@ namespace Portfolio.Infra.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("Portfolio.Core.Entities.RecruiterMediaUpload", b =>
-                {
-                    b.HasOne("AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId");
-
-                    b.HasOne("Portfolio.Core.Entities.JobPost", "Post")
-                        .WithMany("Media")
-                        .HasForeignKey("JobPostId");
-
-                    b.HasOne("Portfolio.Core.Entities.RecruiterProfile", "Recruiter")
-                        .WithMany("Media")
-                        .HasForeignKey("RecruiterId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("AppUser");
-
-                    b.Navigation("Post");
-
-                    b.Navigation("Recruiter");
-                });
-
             modelBuilder.Entity("Portfolio.Core.Entities.RecruiterProfile", b =>
                 {
                     b.HasOne("AppUser", "AppUser")
@@ -816,11 +740,6 @@ namespace Portfolio.Infra.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Portfolio.Core.Entities.JobPost", b =>
-                {
-                    b.Navigation("Media");
-                });
-
             modelBuilder.Entity("Portfolio.Core.Entities.Post", b =>
                 {
                     b.Navigation("Comments");
@@ -845,13 +764,6 @@ namespace Portfolio.Infra.Migrations
                         .IsRequired();
 
                     b.Navigation("WorkExperiences");
-                });
-
-            modelBuilder.Entity("Portfolio.Core.Entities.RecruiterProfile", b =>
-                {
-                    b.Navigation("JobPosts");
-
-                    b.Navigation("Media");
                 });
 #pragma warning restore 612, 618
         }

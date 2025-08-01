@@ -30,7 +30,7 @@ namespace Portfolio.Infra.DataImplementations
             return true;
         }
 
-        public async Task GetWorkExperienceById(Guid id) 
+        public async Task<WorkExperience> GetWorkExperienceByIdAsync(Guid id) 
             => await _db.WorkExperiences.FirstOrDefaultAsync(w=> w.Id == id);
        
 

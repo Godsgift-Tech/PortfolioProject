@@ -12,6 +12,7 @@ namespace Portfolio.Core.DataInterfaces
         IAppUserRepository AppUserRepository { get; }
         IProfessionalStackRepository ProfessionalStackRepository { get; }
         IWorkExperienceRepository WorkExperienceRepository { get; }
+        IRecruiterRepository RecruiterRepository { get; }
         Task<int> CompleteAsync();
 
     }
