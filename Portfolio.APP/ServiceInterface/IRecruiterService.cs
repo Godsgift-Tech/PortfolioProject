@@ -14,12 +14,11 @@ namespace Portfolio.APP.ServiceInterface
     {
         Task<ServiceResponse<CreateRecruiterProfileDto>> CreateRecruiterAsync(CreateRecruiterProfileDto recruiterProfile);
 
-        Task<ServiceResponse<RecruiterProfileDto>> UpdateProfileAsync(Guid id, UpdateRecruiterProfileDto updateRecruiterProfile);
+        Task<ServiceResponse<RecruiterProfileDto>> UpdateRecruiterProfileAsync(Guid id, UpdateRecruiterProfileDto updateRecruiterProfile);
 
         Task<ServiceResponse<bool>> DeleteRecruiterAsync(Guid id);
         Task<ServiceResponse<CreateRecruiterProfileDto>> GetRecruiterById(Guid id);
-
-     
+        Task<ServiceResponse<RecruiterDto>> GetRecruiterByUserId(Guid userId);
 
         Task<ServiceResponse<PagedResult<RecruiterProfileDto>>> GetAllRecruitersAsync(int pageNumber, int pageSize);
     }

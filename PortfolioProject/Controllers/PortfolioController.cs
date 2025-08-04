@@ -53,10 +53,21 @@ namespace Portfolio.API.Controllers
             return result.success ? Ok(result) : NotFound(result);
         }
 
-        [HttpGet("full/{profileId}")]
+        [HttpGet("Complete_Profile_By/{profileId}")]
         public async Task<IActionResult> GetFullProfileById(Guid profileId)
         {
             var response = await _profileService.GetFullProfileByIdAsync(profileId);
+
+            if (!response.success)
+                return NotFound(response);
+
+            return Ok(response);
+        }
+
+        [HttpGet("by/{userId}")]
+        public async Task<IActionResult> GetProfileByUserId(Guid userId)
+        {
+            var response = await _profileService.GetProfileByUserId(userId);
 
             if (!response.success)
                 return NotFound(response);

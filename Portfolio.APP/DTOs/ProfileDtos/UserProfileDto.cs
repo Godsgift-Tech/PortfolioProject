@@ -1,11 +1,8 @@
-﻿using Portfolio.APP.DTOs.AppUser;
-using Portfolio.Core.Entities;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Portfolio.APP.DTOs.ProfileDtos
 {
-    public class FullProfileDto
+    public class UserProfileDto
     {
         [JsonIgnore]
         public Guid Id { get; set; }
@@ -23,17 +20,13 @@ namespace Portfolio.APP.DTOs.ProfileDtos
         [JsonIgnore]
 
         public AppUserDto? AppUser { get; set; }
-        [JsonIgnore]
-
-        public Guid? ProfessionalStackId { get; set; }
-        public DisplayProfessionalStackDto? ProfessionalStack { get; set; }
-
-        public List<DisplayWorkExperienceDto> WorkExperiences { get; set; } = new();
-        public List<MediaUploadDto> MediaUploads { get; set; } = new();
-        public List<PostDto> Posts { get; set; } = new();
-        public List<CommentDto> Comments { get; set; } = new();
        
+
     }
+
+
+
+
 
 
 

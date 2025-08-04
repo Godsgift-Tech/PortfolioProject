@@ -14,14 +14,13 @@ namespace Portfolio.APP.ServiceInterface
     {
         Task<ServiceResponse<CreateProfileDto>> CreateProfileAsync( CreateProfileDto profile);
 
-       // Task<ServiceResponse<CreateProfileDto>> UpdateProfileAsync(Guid id, CreateProfileDto profile);
         Task<ServiceResponse<ProfileDto>> UpdateProfileAsync(Guid id, ProfileUpdateDto profileDto);
 
         Task<ServiceResponse<bool>> DeleteProfileAsync(Guid id);
         Task<ServiceResponse<CreateProfileDto>> GetProfileById(Guid id);
-     //   Task<ServiceResponse<ProfileEntity?>> GetFullProfileAsync(Guid profileId);
 
         Task<ServiceResponse<FullProfileDto?>> GetFullProfileByIdAsync(Guid profileId);
+        Task<ServiceResponse<UserProfileDto?>> GetProfileByUserId(Guid userId);
 
         Task<ServiceResponse<PagedResult<ProfileDto>>> GetAllProfilesAsync(int pageNumber, int pageSize);
     }
