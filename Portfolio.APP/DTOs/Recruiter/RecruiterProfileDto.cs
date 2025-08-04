@@ -23,6 +23,23 @@ namespace Portfolio.APP.DTOs.Recruiter
         public AppUserDto AppUser { get; set; }
     }
 
+    public class RecruiterDto
+    {
+        [Key]
+        public Guid Id { get; set; }
+        public string RecruiterName { get; set; } = string.Empty;
+        public string Qualification { get; set; } = string.Empty;
+        public string CompanyName { get; set; } = string.Empty;
+        public string Position { get; set; } = string.Empty;
+        public string ContactEmail { get; set; } = string.Empty;
+        [JsonIgnore]
+
+        public Guid AppUserId { get; set; }
+        [JsonIgnore]
+        public AppUserDto AppUser { get; set; }
+    }
+
+
     public class CreateRecruiterProfileDto
     {
         public string RecruiterName { get; set; } = string.Empty;

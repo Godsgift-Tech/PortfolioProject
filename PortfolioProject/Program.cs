@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //  Add Database Context
 var configuration = builder.Configuration;
-Console.WriteLine("🔗 Connection string in use: " + configuration.GetConnectionString("DefaultConnection"));
+Console.WriteLine(" Connection string in use: " + configuration.GetConnectionString("DefaultConnection"));
 
 builder.Services.AddDbContext<PortfolioContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -38,6 +38,7 @@ builder.Services.AddScoped<IWorkExperienceService, WorkExperienceService>();
 builder.Services.AddScoped<IProfessionalStackRepository, ProfessionalStackRepository>();
 builder.Services.AddScoped<IProfessionalStackService, ProfessionalStackService>();
 builder.Services.AddScoped<IRecruiterRepository, RecruiterRepository>();
+builder.Services.AddScoped<IRecruiterService, RecruiterService>();
 builder.Services.AddScoped<IUnitOFWork, UnitOFWork>();
 builder.Services.AddMemoryCache();
 

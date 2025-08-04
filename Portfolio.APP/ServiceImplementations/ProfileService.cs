@@ -164,6 +164,17 @@ namespace Portfolio.APP.ServiceImplementations
 
         }
 
+        public async Task<ServiceResponse<UserProfileDto?>> GetProfileByUserId(Guid userId)
+        {
 
+            var searchedProfile = await _unitOFWork.Profiles.GetProfileByUserIdAsync(userId);
+            if (searchedProfile == null)
+            {
+                return new ServiceResponse<UserProfileDto?>(null!, false, "Profile not found");
+            }
+            var profileInfo = _mapper.Map<UserProfileDto>(searchedProfile);
+
+            return new ServiceResponse<UserProfileDto?>(profileInfo, true, "Profile retrieved successfully");
+        }
     }
 }

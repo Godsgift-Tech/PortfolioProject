@@ -2,6 +2,7 @@
 using Portfolio.APP.DTOs;
 using Portfolio.APP.DTOs.AppUser;
 using Portfolio.APP.DTOs.ProfileDtos;
+using Portfolio.APP.DTOs.Recruiter;
 using Portfolio.Core.Entities;
 
 namespace Portfolio.APP.Mapping
@@ -17,8 +18,15 @@ namespace Portfolio.APP.Mapping
       .ForMember(dest => dest.AppUserId, opt => opt.Ignore());
 
             // 
+           // Recruiter
+           CreateMap<RecruiterProfile, RecruiterProfileDto>().ReverseMap();
+           CreateMap<RecruiterProfile, CreateRecruiterProfileDto>().ReverseMap();
+           CreateMap<RecruiterProfile, UpdateRecruiterProfileDto>().ReverseMap();
+           CreateMap<RecruiterProfile, RecruiterDto>().ReverseMap();
+
 
             CreateMap<ProfileEntity, FullProfileDto>().ReverseMap();
+            CreateMap<ProfileEntity, UserProfileDto>().ReverseMap();
             CreateMap<AppUser, AppUserDto>();
             CreateMap<ProfessionalStack, ProfessionalStackDto>().ReverseMap();
             CreateMap<ProfessionalStack,DisplayProfessionalStackDto>().ReverseMap();
